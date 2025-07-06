@@ -1,0 +1,64 @@
+class Math
+{
+    static Array twotothepoint;
+    function void init()
+    {
+        let twotothepoint = Array.new(16);
+        let twotothepoint[0] = 1;
+        let twotothepoint[1] = 2;
+        let twotothepoint[2] = 4;
+        let twotothepoint[3] = 8;
+        let twotothepoint[4] = 16;
+        let twotothepoint[5] = 32;
+        let twotothepoint[6] = 64;
+        let twotothepoint[7] = 128;
+        let twotothepoint[8] = 256;
+        let twotothepoint[9] = 512;
+        let twotothepoint[10] = 1024;
+        let twotothepoint[11] = 2048;
+        let twotothepoint[12] = 4096;
+        let twotothepoint[13] = 8192;
+        let twotothepoint[14] = 16384;
+        let twotothepoint[15] = -32767;
+        let twotothepoint[15] = twotothepoint[15] - 1;
+        return 0;
+    }
+
+    function boolean bit(int x,int i)
+    {
+        var int v;
+
+        let v = twotothepoint[i] & x;
+
+        if(v > 0)
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+    function int multiply1(int x,int y)
+    {
+        var int sum,i;
+        var boolean val;
+        var int shiftedX;
+
+        let sum = 0;
+        let shiftedX = x;
+        let i = 0;
+
+        do Math.init();
+
+        while(i < 16)
+        {
+            let val = Math.bit(y,i);
+            if(val = 1)
+            {
+                let sum = sum + shiftedX;
+            }
+            let shiftedX = shiftedX * 2;
+            let i = i + 1;
+        }
+        return sum;
+    }
+}

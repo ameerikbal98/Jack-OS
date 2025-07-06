@@ -1,0 +1,17 @@
+class Main
+{
+    function void main()
+    {
+        var int x,y,prod;
+
+        let x = 5;
+        let y = 500;
+
+        let prod = Math.multiply1(x,y);
+
+        do Output.printInt(prod);
+
+        return 0;
+
+    }
+}
