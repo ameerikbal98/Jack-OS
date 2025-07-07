@@ -37,7 +37,7 @@ class Math
         return 0;
     }
 
-    function int multiply1(int x,int y)
+    function int multiply(int x,int y)
     {
         var int sum,i;
         var boolean val;
@@ -56,9 +56,113 @@ class Math
             {
                 let sum = sum + shiftedX;
             }
-            let shiftedX = shiftedX * 2;
+            let shiftedX = shiftedX + shiftedX;
             let i = i + 1;
         }
         return sum;
     }
+
+    function int division1(int x,int y)
+    {
+        var int q;
+        if(y > x)
+        {
+            return 0;
+        }
+
+        let q = Math.division(x, Math.multiply(2,y));
+        if((x-Math.multiply(Math.multiply(2,q),y)) < y)
+        {
+            return Math.multiply(2,q);
+        }
+
+        else
+        {
+            return Math.multiply(2,q) + 1;
+        }
+
+    }
+
+    function int mod(int a, int b) // generates mod of two numbers
+    {
+        var int r;
+
+        let r = (a - (b * (a / b)));
+
+        return r;
+    }
+
+    function int pow(int a,int n)
+    {
+        var int x;
+
+        if(n = 0)
+        {
+            return 1;
+        }
+
+        let x = Math.pow(a,n/2);
+
+        if(Math.mod(n,2) = 0)
+        {
+            return x*x;
+        }
+        else
+        {
+            return a*x*x;
+        }
+    }
+
+
+    function int sqrt(int x)
+    {
+        var int y,j,val,q;
+        let y = 0;
+        do Math.init();
+        let j = 7;
+
+        while(j > -1)
+        {
+            let q = y + twotothepoint[j];
+            let val = q * q;
+            if( (val > 0) & (((val < x) | (val = x) )))
+            {
+                let y = q;
+            } 
+            let j = j - 1;
+        }
+
+        return y;
+
+    }
+
+    function int abs(int x)
+    {
+        if(x < 0)
+        {
+            return -x;
+        }
+        return x;
+    }
+
+    function int min(int x, int y)
+    {
+        if(x < y)
+        {
+            return x;
+        }
+        return y;
+    }
+
+    function int max(int x,int y)
+    {
+        if(x > y)
+        {
+            return x;
+        }
+        return y;
+    }
+
+
+    
 }

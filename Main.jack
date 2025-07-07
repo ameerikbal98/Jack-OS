@@ -4,10 +4,9 @@ class Main
     {
         var int x,y,prod;
 
-        let x = 5;
-        let y = 500;
+        let x = 25;
 
-        let prod = Math.multiply1(x,y);
+        let prod = Math.min1(625,1000);
 
         do Output.printInt(prod);
 
