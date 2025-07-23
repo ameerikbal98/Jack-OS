@@ -225,9 +225,6 @@ class Screen {
         while(~(dy > r))
         {
             let x_offset = Math.sqrt((r * r) - (dy * dy));
-            do Output.printInt(dy);
-            do Output.println();
-
             do Screen.drawLine(x - x_offset,y + dy,x + x_offset, y + dy);
             let dy = dy + 1;
         }

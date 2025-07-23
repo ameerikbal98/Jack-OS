@@ -42,14 +42,23 @@ class Math {
      *  When a Jack compiler detects the multiplication operator '*'
      *  in an expression, it handles it by invoking this method. 
      *  Thus, in Jack, x * y and Math.multiply(x,y) return the same value. */
-    function int multiply(int x, int y) {
+    function int multiply(int x, int y) 
+    {
         var int sum,i;
         var boolean val;
         var int shiftedX;
 
+        if((x < 0) & (y < 0))
+        {
+            let x = -x;
+            let y = -y;
+        }
+
         let sum = 0;
         let shiftedX = x;
         let i = 0;
+
+        
 
         while(i < n)
         {
