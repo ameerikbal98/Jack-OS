@@ -80,4 +80,158 @@ class Screen {
         do Memory.poke(screen_start + address,val);
         return;
     }
+
+
+    /** Draws a line from pixel (x1,y1) to pixel (x2,y2), using the current color. */
+    function void drawLine(int x1, int y1, int x2, int y2) {
+
+        var int dx,dy,diff,a,b,x,y,m;
+
+        let a = 0;
+        let b = 0;
+        let diff = 0;
+
+        let dx = Math.abs(x2 - x1);
+        let dy = Math.abs(y2 - y1);
+
+        if(x2 = x1)
+        {
+            let x = x1;
+            if(y2 > y1)
+            {
+                let y = y1;
+            }
+            else
+            {
+                let y = y2;
+            }
+            while( ~(b > dy) ) //to make sure a and b are less the dx and dy respectively.
+            {
+                do Screen.drawPixel(x ,y + b);
+
+                let b = b + 1;
+            }
+            return;
+        }
+
+        if(y2 = y1)
+        {
+            let y = y1;
+            if(x2 > x1)
+            {
+                let x = x1;
+            }
+            else
+            {
+                let x = x2;
+            }
+            while( ~(a > dx) ) //to make sure a and b are less the dx and dy respectively.
+            {
+                do Screen.drawPixel(x + a,y);
+
+                let a = a + 1;
+            }
+            return;
+        }
+
+        if( ((x2 > x1) & (y2 < y1)) | ((x2 < x1) & (y1 < y2)) )
+        {
+            if(x1 < x2)
+            {
+                let x = x1;
+                let y = y1;
+            }
+            else
+            {
+                let x = x2;
+                let y = y2;
+            }
+            while( (~(a > dx)) & (~(b > dy)) ) //to make sure a and b are less the dx and dy respectively.
+            {
+                do Screen.drawPixel(x + a,y - b);
+
+                if(diff < 0) 
+                {
+                    let a = a + 1;
+                    let diff = diff + dy;
+                }
+                else
+                {
+                    let b = b + 1;
+                    let diff = diff - dx;
+                }
+            }
+            return;
+        }
+
+        if( ((x2 > x1) & (y2 > y1)) | ((x1 > x2) & (y1 > y2)) )
+        {
+            if(x1 < x2)
+            {
+                let x = x1;
+                let y = y1;
+            }
+            else
+            {
+                let x = x2;
+                let y = y2;
+            }
+            while( (~(a > dx)) & (~(b > dy)) ) //to make sure a and b are less the dx and dy respectively.
+            {
+                do Screen.drawPixel(x + a,y + b);
+
+                if(diff < 0) 
+                {
+                    let a = a + 1;
+                    let diff = diff + dy;
+                }
+                else
+                {
+                    let b = b + 1;
+                    let diff = diff - dx;
+                }
+            }
+            return;
+        }
+        return;
+    }
+
+
+    /** Draws a filled rectangle whose top left corner is (x1, y1)
+     *  and bottom right corner is (x2,y2), using the current color. */
+    function void drawRectangle(int x1, int y1, int x2, int y2) 
+    {
+        var int width,i;
+
+        let width = Math.abs(y2 - y1);
+        let i = 0;
+
+        while( ~(i > width) )
+        {
+            do Screen.drawLine(x1,y1+i,x2,y1+i);
+            let i = i + 1;
+        }
+        return;
+    }
+
+
+    /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
+    function void drawCircle(int x, int y, int r) 
+    {
+        var int dy,x_offset;
+
+        let dy = -r;
+
+        while(~(dy > r))
+        {
+            let x_offset = Math.sqrt((r * r) - (dy * dy));
+            do Output.printInt(dy);
+            do Output.println();
+
+            do Screen.drawLine(x - x_offset,y + dy,x + x_offset, y + dy);
+            let dy = dy + 1;
+        }
+        return;
+    }
+
 }

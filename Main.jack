@@ -1,16 +1,15 @@
-class Main
-{
-    function void main()
-    {
-        var int x,y,prod;
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/MathTest/Main.jack
 
-        let x = 25;
+// Tests the OS Math class.
+class Main {
 
-        let prod = Math.min1(625,1000);
+    // Performs various mathematical operations, using calls to the Math class methods.
+    function void main() {
 
-        do Output.printInt(prod);
-
-        return 0;
-
+        do Screen.drawCircle(140,60,30);
+        return;
     }
 }
