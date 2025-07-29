@@ -1,0 +1,160 @@
+class String 
+{
+    field Array str;
+    field int length,maxLength;
+
+    /** constructs a new empty string with a maximum length of maxLength
+     *  and initial length of 0. */
+    constructor String new(int maxL) 
+    {
+        if(maxL < 0)
+        {
+            do Sys.error(404);
+        }
+        if(maxL > 0)
+        {
+            let str = Array.new(maxL);
+        }
+
+        let maxLength = maxL;
+        return this;
+    }
+
+    method void dispose()
+    {
+        if(~(str = 0))
+        {
+			do str.dispose();
+		}
+		do Memory.deAlloc(this);
+		return;
+    }
+
+    method int length()
+    {
+        return length;
+    }
+
+    method char charAt(int j)
+    {
+        return str[j];
+    }
+
+    /** Sets the character at the j-th location of this string to c. */
+    method void setCharAt(int j, char c) 
+    {
+        if((j < 0) | (j > maxLength))
+        {
+            do Sys.error(414);
+        }
+        let str[j] = c;
+        return;
+    }
+
+    /** Appends c to this string's end and returns this string. */
+    method String appendChar(char c) 
+    {
+        if(length = maxLength)
+        {
+            do Sys.error(434);
+        }
+        let str[length] = c;
+        let length = length + 1;
+        return this;
+    }
+
+    /** Erases the last character from this string. */
+    method void eraseLastChar() 
+    {
+        if(length = 0)
+        {
+            do Sys.error(424);
+        }
+        let str[length - 1] = 0;
+        let length = length - 1;
+        return;
+    }
+
+    /** Returns the integer value of this string, 
+     *  until a non-digit character is detected. */
+
+    method int intValue() 
+    {
+        var int val,i,d;
+        var boolean negflag;
+        
+        let val = 0;
+        let i = 0;
+
+        if(str[i] = 45)
+        {
+            let negflag = true;
+            let i = i + 1;
+        }
+
+        while(i < length)
+        {
+            let d = str[i];
+            if( (d < 48) | (d > 57)) // cehck if the character is a number
+            {
+                if(i = 0)//if no character is found it returns -1
+                {
+                    return -1;
+                }
+                return val;
+            }
+            let d = d - 48;
+            let val = (val * 10) + d;
+            let i = i + 1;
+        }
+        if(negflag)
+        {
+            let val = -val;
+        }
+        return val;
+
+
+    }
+
+    method void setInt(int val) 
+    {
+        var int lastDigit,ascii,val_tmp;
+        if(val < 0)
+        {
+            do appendChar(45);
+            let val = -val;
+        }
+
+        let lastDigit = Math.mod(val,10);
+        let ascii = 48;
+
+        if(val < 10)
+        {
+            do appendChar(ascii + lastDigit);
+        }
+        else
+        {
+            do setInt(val/10);
+            do appendChar(ascii + lastDigit);
+        }
+        return;
+    }
+
+    /** Returns the new line character. */
+    function char newLine() 
+    {
+        return 128;
+    }
+
+    /** Returns the backspace character. */
+    function char backSpace() 
+    {
+        return 129;
+    }
+
+    /** Returns the double quote (") character. */
+    function char doubleQuote() 
+    {
+        return 34;
+    }
+}
