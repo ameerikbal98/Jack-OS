@@ -19,13 +19,15 @@ class Output {
     // Character map for displaying characters
     static Array charMaps; 
     static int cursor_x,cursor_y;
-    static int initial_memory,current_memory,segment;
+    static int initial_memory,segment;
 
     /** Initializes the screen, and locates the cursor at the screen's top-left. */
     function void init() {
         let cursor_x = 0;
         let cursor_y = 0;
         let initial_memory = 16384;
+        let segment  = 1;
+        do Output.initMap();
         return;
         
     }
@@ -185,31 +187,41 @@ class Output {
     function void moveCursor(int i, int j) 
     {
         var int value;
-        var int left_clear,right_clear;
+        var int left_clear,right_clear,k,mem_addr;
         if((i > 22) | (i < 0) | (j < 0) | (j > 63))
         {
             do Sys.error(304);
         }
 
-        let left_clear = 255;// 
-        let right_clear = -256;
+        let left_clear = -256;// 
+        let right_clear = 255;
         let cursor_x = j;
         let cursor_y = i;
+        let mem_addr = initial_memory + (j / 2) + (i * 11 * 32);
         if(Math.mod(j,2) = 0)
         {
-            let segment = 0; //means this coloumn  uses the More significant 8 bits of the memory.
-            let current_memory = initial_memory + (j / 2) + (i * 11 * 32); 
-            let value = Memory.peek(current_memory); // read the current values in the memory
-            let value = value & left_clear; //clears the Most significant bits in the memory to zero.
-            do Memory.poke(current_memory,value); //write back the values
+            let segment = 1; //means this coloumn  uses the More significant 8 bits of the memory.
+            while(k < 11)
+            {
+                let value = Memory.peek(mem_addr); // read the current values in the memory
+                let value = value & left_clear; //clears the Most significant bits in the memory to zero.
+                do Memory.poke(mem_addr,value); //write back the values
+                let k = k + 1;
+                let mem_addr = mem_addr +  32;
+            }
+            
         }
         else
         {
-            let segment = 1; //means this coloumn  uses the less significant 8 bits of the memory.
-            let current_memory = initial_memory + ((j - 1) / 2) + (i * 11 * 32);
-            let value = Memory.peek(current_memory);
-            let value = value & right_clear; //clears the least significant bits in the memory to zero.
-            do Memory.poke(current_memory,value); //write back the values to the memory.
+            let segment = 2; //means this coloumn  uses the less significant 8 bits of the memory.
+            while(k < 11)
+            {
+                let value = Memory.peek(mem_addr); // read the current values in the memory
+                let value = value & right_clear; //clears the Most significant bits in the memory to zero.
+                do Memory.poke(mem_addr,value); //write back the values
+                let k = k + 1;
+                let mem_addr = mem_addr + 32;
+            }
         }
         return;
     }
@@ -222,21 +234,19 @@ class Output {
         var Array cmap_tmp;
         var int i,mem_addr,vals;
 
-        let cmap_vals = Output.getMap(c);
+        let cmap_tmp = Output.getMap(c);
         let i = 0;
-        let mem_addr = current_memory;
-
-        if(segment = 0)
+        let mem_addr = initial_memory + (cursor_x / 2) + (cursor_y * 11 * 32);
+        if(segment = 1)
         {
             while(i < 11)
             {
                 let cmap_vals = cmap_tmp[i];
-                let cmap_vals = cmap_vals * 8; // shift the values 8 bits to the left
-                let mem_addr = mem_addr + (i * 32);
                 let vals = Memory.peek(mem_addr);
                 let vals = vals | cmap_vals;
-                do Memory.poke(mem_addr,vals);
+                do Memory.poke(mem_addr,cmap_vals);
                 let i = i + 1;
+                let mem_addr = mem_addr + 32;
             }
         }
         else
@@ -244,22 +254,32 @@ class Output {
             while(i < 11)
             {
                 let cmap_vals = cmap_tmp[i];
-                let mem_addr = mem_addr + (i * 32);
+                let cmap_vals = cmap_vals * 256;
                 let vals = Memory.peek(mem_addr);
                 let vals = vals | cmap_vals;
                 do Memory.poke(mem_addr,vals);
+                let mem_addr = mem_addr +  32;
                 let i = i + 1;
             }
         }
 
-        if(cursor_y = 63)
+        if(cursor_x = 63)
         {
-            do Output.moveCursor(cursor_y + 1,0);
+            if(cursor_y = 22)
+            {
+                do Output.moveCursor(0,0);
+            }
+            else
+            {
+                do Output.moveCursor(cursor_y + 1,0);
+            } 
         }
         else
         {
             do Output.moveCursor(cursor_y,cursor_x + 1);
         }
+
+        
         return;
     }
 
@@ -273,7 +293,7 @@ class Output {
 
         while(i < s.length())
         {
-            do Output.printChar(s[i]);
+            do Output.printChar(s.charAt(i));
             let i = i + 1;
         }
         return;
@@ -303,7 +323,7 @@ class Output {
     /** Advances the cursor to the beginning of the next line. */
     function void println() 
     {
-        do Output.moveCursor(cursor_x + 1,0);
+        do Output.moveCursor(cursor_y + 1,0);
         return;
     }
 
