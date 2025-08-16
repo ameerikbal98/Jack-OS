@@ -63,7 +63,7 @@ class Math {
         while(i < n)
         {
             let val = Math.bit(y,i);
-            if(val = 1)
+            if(val)
             {
                 let sum = sum + shiftedX;
             }
@@ -198,8 +198,8 @@ class Math {
 
         if(v > 0)
         {
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 }
